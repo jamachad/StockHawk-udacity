@@ -60,9 +60,14 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                if(getCallingActivity() != null){
 
                     onBackPressed();
                     return true;
+                }else{
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                }
         }
         return super.onOptionsItemSelected(item);
     }
