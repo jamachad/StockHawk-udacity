@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -16,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.StockWidgetProvider;
+import com.udacity.stockhawk.data.Contract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +73,12 @@ public class AddStockDialog extends DialogFragment {
         Activity parent = getActivity();
         if (parent instanceof MainActivity) {
             ((MainActivity) parent).addStock(stock.getText().toString());
+        }
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getActivity());
+        ComponentName name = new ComponentName(getActivity(), StockWidgetProvider.class);
+        if (appWidgetManager != null && appWidgetManager.getAppWidgetIds(name).length > 0) {
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(name);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view_stocks);
         }
         dismissAllowingStateLoss();
     }

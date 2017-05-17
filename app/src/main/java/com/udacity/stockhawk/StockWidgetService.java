@@ -58,18 +58,17 @@ public class StockWidgetService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
+            //no need to call cursor here since onDataSetChanged() get's called immediately after onCreate
+        }
+
+        @Override
+        public void onDataSetChanged() {
             mCursor = mContext.getContentResolver().query(
                     Contract.Quote.URI,
                     null,
                     null,
                     null,
                     Contract.Quote.COLUMN_SYMBOL);
-
-        }
-
-        @Override
-        public void onDataSetChanged() {
-
         }
 
         @Override
@@ -82,6 +81,10 @@ public class StockWidgetService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int i) {
+            return drawWidget(i);
+        }
+
+        private RemoteViews drawWidget(int i){
             mCursor.moveToPosition(i);
             float rawAbsoluteChange = mCursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
             float percentageChange = mCursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
